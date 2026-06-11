@@ -21,6 +21,8 @@ BASE_URL = "/accounts"
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
+
+
 class TestAccountService(TestCase):
     """Account Service Tests"""
 
@@ -88,9 +90,7 @@ class TestAccountService(TestCase):
         """It should Create a new Account"""
         account = AccountFactory()
         response = self.client.post(
-            BASE_URL,
-            json=account.serialize(),
-            content_type="application/json"
+            BASE_URL, json=account.serialize(), content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -115,9 +115,7 @@ class TestAccountService(TestCase):
         """It should not Create an Account when sending the wrong media type"""
         account = AccountFactory()
         response = self.client.post(
-            BASE_URL,
-            json=account.serialize(),
-            content_type="test/html"
+            BASE_URL, json=account.serialize(), content_type="test/html"
         )
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
@@ -132,8 +130,8 @@ class TestAccountService(TestCase):
         data = resp.get_json()
         self.assertEqual(data["name"], account.name)
 
-
         ######################################################################
+
     # LIST ACCOUNTS TEST
     ######################################################################
     def test_list_accounts(self):
@@ -161,7 +159,6 @@ class TestAccountService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertEqual(len(data), 5)
-
 
     def test_update_account(self):
         """It should Update an existing Account"""
