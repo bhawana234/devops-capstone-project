@@ -6,7 +6,20 @@ This microservice handles the lifecycle of Accounts
 from flask import jsonify, request, make_response, abort, url_for
 from service.models import Account
 from service.common import status  # HTTP Status Codes
-from . import app  # Import Flask application
+from . import app  # Import the real Flask application
+
+@app.after_request
+def add_security_headers(response):
+    # Security headers
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['Content-Security-Policy'] = "default-src 'self'; object-src 'none'"
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+
+    # CORS header
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
 
 
 ############################################################
