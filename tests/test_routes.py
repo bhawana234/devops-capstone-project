@@ -13,9 +13,6 @@ from service.common import status  # HTTP Status Codes
 from service.models import db, Account, init_db
 from service.routes import app
 from service import talisman
-from service import app
-from service import status
-
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
@@ -24,6 +21,7 @@ DATABASE_URI = os.getenv(
 BASE_URL = "/accounts"
 
 HTTPS_ENVIRON = {'wsgi.url_scheme': 'https'}
+
 
 class TestAccountAPIService(unittest.TestCase):
 
@@ -49,8 +47,6 @@ class TestAccountAPIService(unittest.TestCase):
         response = self.client.get('/', environ_overrides=HTTPS_ENVIRON)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), '*')
-
-
 
 ######################################################################
 #  T E S T   C A S E S
