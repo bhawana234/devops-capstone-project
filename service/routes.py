@@ -32,7 +32,10 @@ def health():
 @app.route("/accounts", methods=["POST"])
 def create_account():
     if request.content_type != "application/json":
-        abort(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, "Content-Type must be application/json")
+        abort(
+            status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            "Content-Type must be application/json",
+        )
     data = request.get_json()
     if not data or "name" not in data or "email" not in data:
         abort(status.HTTP_400_BAD_REQUEST, "Invalid account data")
@@ -76,4 +79,3 @@ def delete_account(account_id):
     if account:
         account.delete()
     return "", status.HTTP_204_NO_CONTENT
-
