@@ -1,3 +1,24 @@
+<<<<<<< HEAD
+=======
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: echo
+spec:
+  description: This task will echo the message.
+  params:
+    - name: message
+      description: The message to echo
+      type: string
+  steps:
+    - name: echo-message
+      image: alpine:3
+      command: [/bin/echo]
+      args: ["$(params.message)"]
+
+---
+>>>>>>> c870ddd (added link task)
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -33,6 +54,17 @@ spec:
       image: $(params.image)
       workingDir: /workspace/source
       script: |
+<<<<<<< HEAD
         #!/bin/sh
         pip install flake8
         flake8 "${params.args[@]}"
+=======
+        #!/usr/bin/env sh
+        set -eu
+        echo "Removing all files from ${WORKSPACE_SOURCE_PATH} ..."
+        if [ -d "${WORKSPACE_SOURCE_PATH}" ] ; then
+          rm -rf "${WORKSPACE_SOURCE_PATH:?}"/*
+          rm -rf "${WORKSPACE_SOURCE_PATH}"/.[!.]*
+          rm -rf "${WORKSPACE_SOURCE_PATH}"/..?*
+        fi
+>>>>>>> c870ddd (added link task)

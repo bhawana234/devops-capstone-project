@@ -15,7 +15,9 @@ app = Flask(__name__)
 app.config.from_object(config)
 
 # Security and CORS
-talisman = Talisman(app, content_security_policy="default-src 'self'; object-src 'none'")
+talisman = Talisman(
+    app, content_security_policy="default-src 'self'; object-src 'none'"
+)
 CORS(app)
 
 # Import routes AFTER app is created
@@ -36,5 +38,4 @@ except Exception as error:  # pylint: disable=broad-except
     sys.exit(4)
 
 app.logger.info("Service initialized!")
-
 __all__ = ["app", "talisman"]

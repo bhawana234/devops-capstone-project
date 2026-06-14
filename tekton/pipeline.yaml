@@ -38,6 +38,7 @@ spec:
       taskRef:
         name: flake8
       params:
+<<<<<<< HEAD
         - name: image
           value: "python:3.9-slim"
         - name: args
@@ -62,3 +63,11 @@ spec:
           value: "-v --with-spec --spec-color"
         runAfter:
           - clone
+=======
+      - name: image
+        value: "python:3.9-slim"
+      - name: args
+        value: ["--count","--max-complexity=10","--max-line-length=127","--statistics"]
+      runAfter:
+        - clone
+>>>>>>> c870ddd (added link task)

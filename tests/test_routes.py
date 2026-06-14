@@ -110,8 +110,12 @@ class TestAccountService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_list_accounts(self):
-        account1 = AccountFactory(); account1.create()
-        account2 = AccountFactory(); account2.create()
+        account1 = AccountFactory()
+        account1.create()
+
+        account2 = AccountFactory()
+        account2.create()
+
         resp = self.client.get(BASE_URL)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
