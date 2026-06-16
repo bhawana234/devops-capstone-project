@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: accounts
-          image: IMAGE_NAME_HERE
+          image: IMAGE_NAME_HERE   # Tekton will substitute this
           resources: {}
           env:
             - name: DATABASE_HOST
@@ -36,5 +36,3 @@ spec:
                 secretKeyRef:
                   name: postgresql
                   key: database-user
-
-
