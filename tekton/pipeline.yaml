@@ -1,3 +1,4 @@
+---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
@@ -7,8 +8,10 @@ spec:
     - name: pipeline-workspace
   params:
     - name: repo-url
+      description: Git repository URL
     - name: branch
       default: main
+      description: Branch to checkout
   tasks:
     - name: init
       workspaces:
@@ -38,7 +41,6 @@ spec:
       taskRef:
         name: flake8
       params:
-<<<<<<< HEAD
         - name: image
           value: "python:3.9-slim"
         - name: args
@@ -50,24 +52,19 @@ spec:
       runAfter:
         - clone
 
-      - name: tests
-        workspaces:
-          - name: source
+    - name: tests
+      workspaces:
+        - name: source
           workspace: pipeline-workspace
-        taskRef:
-          name: nose
-        params:
-	      - name: database_uri
-		      value: "sqlite:///test.db"
+      taskRef:
+        name: nose
+      params:
+        - name: database_uri
+          value: "sqlite:///test.db"
         - name: args
-          value: "-v --with-spec --spec-color"
-        runAfter:
-          - clone
-=======
-      - name: image
-        value: "python:3.9-slim"
-      - name: args
-        value: ["--count","--max-complexity=10","--max-line-length=127","--statistics"]
+          value:
+            - "-v"
+            - "--with-spec"
+            - "--spec-color"
       runAfter:
-        - clone
->>>>>>> c870ddd (added link task)
+        - lint
