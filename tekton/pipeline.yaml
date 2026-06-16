@@ -1,13 +1,84 @@
-    - name: tests
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: cd-pipeline
+spec:
+  params:
+    - name: repo-url
+      description: Git repository URL
+    - name: branch
+      description: Branch to checkout
+      default: main
+    - name: build-image
+      description: Target image name to build
+  workspaces:
+    - name: pipeline-workspace
+  tasks:
+    - name: init
+      taskRef:
+        name: cleanup
       workspaces:
         - name: source
           workspace: pipeline-workspace
+
+    - name: clone
       taskRef:
-        name: nose
+        name: git-clone
+      runAfter:
+        - init
       params:
-	  - name: database_uri
-		value: "sqlite:///test.db"
-      - name: args
-        value: "-v --with-spec --spec-color"
+        - name: url
+          value: $(params.repo-url)
+        - name: revision
+          value: $(params.branch)
+      workspaces:
+        - name: output
+          workspace: pipeline-workspace
+
+    - name: lint
+      taskRef:
+        name: flake8
       runAfter:
         - clone
+      params:
+        - name: image
+          value: python:3.9-slim
+        - name: args
+          value:
+            - --count
+            - --max-complexity=10
+            - --max-line-length=127
+            - --statistics
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace
+
+    - name: tests
+      taskRef:
+        name: nose
+      runAfter:
+        - lint
+      params:
+        - name: database_uri
+          value: "sqlite:///test.db"
+        - name: args
+          value:
+            - "-v"
+            - "--with-spec"
+            - "--spec-color"
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace
+
+    - name: build
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      runAfter:
+        - tests
+      params:
+        - name: IMAGE
+          value: $(params.build-image)
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace

@@ -10,8 +10,9 @@ spec:
   params:
     - name: args
       description: Arguments to pass to nosetests
-      type: string
-      default: "-v"
+      type: array
+      default:
+        - "-v"
     - name: database_uri
       description: Database connection string
       type: string
@@ -31,5 +32,6 @@ spec:
         python -m pip install --upgrade pip wheel
         pip install -qr requirements.txt
 
-        echo "***** Running nosetests with: $(params.args)"
-        nosetests $(params.args)
+        echo "***** Running nosetests with args: ${params_args[@]} *****"
+        nosetests "${params_args[@]}"
+
